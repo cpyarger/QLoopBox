@@ -8,10 +8,8 @@ import mido
 import base64
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtCore import QFile
-from PySide2.QtUiTools import QUiLoader
 
 from PySide2.QtCore import Signal, Slot, QObject
-from PySide2.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic, QtWidgets, QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
