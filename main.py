@@ -2,27 +2,51 @@
 import sys
 import os
 
-
+import logging
+import json
+import mido
+import base64
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
 
+from PySide2.QtCore import Signal, Slot, QObject
+from PySide2.QtWidgets import QApplication, QMainWindow
+from PyQt5 import uic, QtWidgets, QtCore
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSlot, pyqtSignal
+import sys
+import signal
+import sounddevice as sd
 
-class QLoopBox(QMainWindow):
+
+class MidiHandler():
     def __init__(self):
-        super(QLoopBox, self).__init__()
-        self.load_ui()
+        logging.debug("MIDI Handler Class Startup")
 
-    def load_ui(self):
-        loader = QUiLoader()
-        path = os.path.join(os.path.dirname(__file__), "form.ui")
-        ui_file = QFile(path)
-        ui_file.open(QFile.ReadOnly)
-        loader.load(ui_file, self)
-        ui_file.close()
+
+
 
 if __name__ == "__main__":
-    app = QApplication([])
-    widget = QLoopBox()
-    widget.show()
-    sys.exit(app.exec_())
+    Form, Window = uic.loadUiType("form.ui");
+
+    app = QApplication(sys.argv);
+    window = Window();
+    form = Form();
+    form.setupUi(window);
+    window.show();
+    mc=MidiHandler();
+    form.cb_midi_in.addItems(mido.get_input_names());
+    form.cb_midi_out.addItems(mido.get_output_names());
+    devices=sd.query_devices();
+    for o in devices:
+
+        if (o["max_input_channels"] > 0):
+            print (o["name"])
+            form.cb_audio_in.addItem(o["name"])
+        if (o["max_output_channels"] > 0):
+            print (o["name"])
+            form.cb_audio_out.addItem(o["name"])
+    logging.debug("Program Startup");
+
+    sys.exit(app.exec_());
