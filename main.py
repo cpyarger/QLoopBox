@@ -26,7 +26,6 @@ class MidiHandler(QtCore.QObject):
         self.listen_to_next_message=False
     def midi_callback(self,message):
         if (self.listen_to_next_message):
-            
             if message.type == "note_on":
                 self.SendMessage.emit( "Note", "on", str(message.note))
             elif message.type == "note_off":
@@ -45,7 +44,6 @@ class MidiHandler(QtCore.QObject):
     def close_midi_in_port(self):
         logging.debug(u"Closed port {} ".format(self.port.name))
         self.port.close()
-
     def open_midi_output_port(self, port_name):
         try:
             self.out_port = mido.open_output(port_name, callback=self.midi_callback)
